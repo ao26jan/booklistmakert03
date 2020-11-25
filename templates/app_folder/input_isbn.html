@@ -1,0 +1,41 @@
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='slim' %}
+{% load static %}
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type='text/css' href="{% static 'css/style.css'%}">
+    <link rel="stylesheet" href="https://cccabinet.jpn.org/bootstrap4/css/style.css">
+    <title> Book List Maker </title>
+    {% block extra_css %}{% endblock %}
+  </head>
+            {% block contents %}
+
+            <h1>ISBNを手入力してください</h1>
+            <h6>※楽天ブックスのデータベースより書籍情報を検索します</h6>
+            <hr>
+            <form  action="{% url 'app_folder:input_isbn' %}" method="post">
+            {% csrf_token %}
+            <div class="container-fluid">
+
+                <div class="row">
+                        <a>ISBN</a>
+                        <input type="text" name="isbn" />
+                </div> <!--row end -->
+
+                <div class="row">
+                  <div class="text-left align-bottom">
+                    <button type="submit" name="button" class="btn btn-info">
+                    検索
+                    </button>
+                  </div>
+                </div>
+
+            </div>
+
+
+            </form>
+
+            {% endblock %}
