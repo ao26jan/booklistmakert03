@@ -37,11 +37,11 @@ def search_book(isbn):
     #jsnがNoneではない場合
     title = jsn['Items'][0]['Item']['title']
     author = jsn['Items'][0]['Item']['author']
-    Detail = jsn['Items'][0]['Item']['itemCaption']
-    Publisher = jsn['Items'][0]['Item']['publisherName']
-    pubdate = jsn['Items'][0]['Item']['salesDate']
-    price = jsn['Items'][0]['Item']['itemPrice']
+    detail = jsn['Items'][0]['Item']['itemCaption']
+    publisher = jsn['Items'][0]['Item']['publisherName']
+    date = jsn['Items'][0]['Item']['salesDate']
+    price = str(jsn['Items'][0]['Item']['itemPrice'])
     #辞書型に結果格納
-    search_result.update({'出版社':Publisher,'書名':title,'著者':author,'単価':price,'詳細':Detail,'出版年月':pubdate,'ISBN':isbn})
+    search_result.update({'publisher':publisher,'title':title,'author':author,'price':price,'detail':detail,'date':date,'isbn':isbn})
 
     return search_result

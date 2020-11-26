@@ -4,6 +4,7 @@ app_folder/urlsからの決定を決定をうけて、処理を処理を決定�
 import csv
 import io
 import requests
+import json
 from django import forms
 from django.shortcuts import render
 from django.shortcuts import redirect
@@ -13,60 +14,61 @@ from .models import BookListModel
 from .forms import BookRegistForm
 from .search_book import search_book
 
+message = 'start!'
+booklist = BookListModel.objects.all()
+bookdata_dict = {}
+form = BookRegistForm()
+
+context = {'message':message,
+            'booklist':booklist,
+            'bookdata_dict':bookdata_dict,
+            'form':form,
+            }
+
 def index(request):
-    booklist = BookListModel.objects.all()
-    return render(request, 'app_folder/index.html',{'booklist':booklist})
+    context['booklist'] = BookListModel.objects.all()
+    return render(request, 'app_folder/index.html',context)
 
+#ISBN入力
 def input_isbn(request):
-
+    booklist = BookListModel.objects.all()
     if request.method == 'POST':
     # 画面からPOSTした場合
         isbn = request.POST['isbn']
-        #isbn = isbn
         bookdata_dict = search_book(isbn)
-
-        #return HttpResponse(bookdata)
-
+        #bookdata_json = json.dumps(bookdata_dict)
+        #formにPOSTデータ書き込み。しないとバリテーションエラー
+        form = BookRegistForm(request.POST)
         #formにbookdata_dictを差し込み
-        form = BookRegistForm()
+        form = BookRegistForm(bookdata_dict)
         #form_type = type(form['publisher'])
         #return HttpResponse(form_type)
-        #form['publisher']
-        pub = bookdata_dict['出版社']
+        #form['publisher'] = '阪急コミュニケーションズ' #bookdata_dict['出版社']
         #return redirect('../')
-
         #form = BookListModel.objects.all()
-        return HttpResponse(type(pub))
+        #return HttpResponse(form['publisher'])
 
         # 画面からPOSTした値を取得
         if form.is_valid():
-            form.save(commit=True) #データが登録される
+            form.save(commit=True) #データ登録
+            context['message'] = 'search and save is successed!\n'
+            context['bookdata_dict']=bookdata_dict
+            context['form']=form
             return redirect('../')
-            #return render(request, 'app_folder/index.html')
+            #return render(request, '../app_folder/index.html',context)
         else:
-            print('ERROR FORM INVALID')
-
+            #for ele in form:
+            #    message = message + "\n" + ele
+            context['message'] = 'valid error'
+            context['bookdata_dict']=bookdata_dict
+            context['form']=form
+            return redirect('../')
+            #return render(request, '../app_folder/index.html',context)
 
     return render(request, 'app_folder/input_isbn.html')
 
-
+#手入力用関数
 def input_manual(request):
-    # form登録用のビュー
-
-    '''
-    params = {'message': '', 'form': None}
-    if request.method == 'POST':
-        form = NewBookForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return index(request)#redirect('list')
-        else:
-            params['message'] = '再入力して下さい'
-            params['form'] = form
-    else:
-        params['form'] = NewBookForm()
-    return render(request, 'app_folder/input_manual.html', params)
-    '''
 
     form = BookRegistForm() # formのインスタンス作成
 
@@ -76,22 +78,15 @@ def input_manual(request):
         # 画面からPOSTした値を取得
         if form.is_valid():
             form.save(commit=True) #データが登録される
+            message = 'データが登録されました！\n'
             return redirect('../')
             #return render(request, 'app_folder/index.html')
         else:
-            print('ERROR FORM INVALID')
+            message = "再入力してください"
+            return redirect('app_folder/input_manual.html')
 
-    return render(request, 'app_folder/input_manual.html', {'form': form})
     # POSTでない場合の画面にformを渡す
-
-    '''
-    フォームで送受信する場合
-    def post(self, request, *args, **kwargs):
-        context = {
-            'isbn': request.POST['isbn'],
-        }
-        return render(request, 'index.html', context)
-    '''
+    return render(request, 'app_folder/input_manual.html', {'form': form})
 
 #ファイル出力
 def csv_export(request):
@@ -111,7 +106,7 @@ def csv_export(request):
 
     #データ書き込み
     for BookList in BookList:
-        writer.writerow([BookList.id,BookList.publisher,BookList.title,BookList.author,BookList.price, BookList.detail,BookList.pubdate,BookList.isbn])
+        writer.writerow([BookList.id,BookList.publisher,BookList.title,BookList.author,BookList.price, BookList.detail,BookList.date,BookList.isbn])
     return response
 
 #全件削除

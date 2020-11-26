@@ -7,7 +7,7 @@ class BookListModel(models.Model):
     price = models.CharField('単価',max_length=255)
     detail = models.CharField('詳細',max_length=10001)
     date = models.CharField('出版年月',max_length=255)
-    isbn = models.CharField('ISBN',max_length=255,unique=True)
+    isbn = models.CharField('ISBN',max_length=255)
 
     def __str__(self):
         return self.title

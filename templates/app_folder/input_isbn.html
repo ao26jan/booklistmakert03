@@ -13,7 +13,7 @@
   </head>
             {% block contents %}
 
-            <h1>ISBNを手入力してください</h1>
+            <h1>ISBN（10桁）を手入力してください</h1>
             <h6>※楽天ブックスのデータベースより書籍情報を検索します</h6>
             <hr>
             <form  action="{% url 'app_folder:input_isbn' %}" method="post">
@@ -21,8 +21,8 @@
             <div class="container-fluid">
 
                 <div class="row">
-                        <a>ISBN</a>
-                        <input type="text" name="isbn" />
+                        <a>ISBN978-</a>
+                        <input type="text" name="isbn" pattern="^[0-9]{10}" required />
                 </div> <!--row end -->
 
                 <div class="row">

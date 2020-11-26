@@ -12,6 +12,27 @@
     {% block extra_css %}{% endblock %}
   </head>
             {% block contents %}
+            <h1><a href="https://ao26jan.pythonanywhere.com/app_folder/">Book List Maker</a></h1>
+            {% if message %}
+                <p>{{message}}</P>
+            {% endif %}
+            <hr>
+            <hr>
+            <p>message area</p>
+            {% if message %}
+                <p>{{message}}</P>
+            {% endif %}
+            <hr>
+            <p>bookdata_dict area</p>
+            {% if bookdata_dict %}
+                <p>{{bookdata_dict}}</P>
+            {% endif %}
+            <hr>
+            <p>form</p>
+            {% if form %}
+                <p>{{form}}</P>
+            {% endif %}
+            <hr>
             <h4 class="mt-5 mb-4 border-bottom">入力方法を選んでください</h4>
             <form action="{% url 'app_folder:index' %}" method="post">
             <div class="container-fluid">
@@ -30,7 +51,7 @@
                                 <td class="col-sm-1">出版社</td>
                                 <td class="col-sm-2">書名</td>
                                 <td class="col-sm-1">著者</td>
-                                <td class="col-sm-1">単価</td>
+                                <td class="col-sm-1">単価（税込）</td>
                                 <td class="col-sm-3">詳細</td>
                                 <td class="col-sm-1">出版年月</td>
                                 <td class="col-sm-1">ISBN</td>
