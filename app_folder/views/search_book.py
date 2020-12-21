@@ -1,13 +1,17 @@
+'''
+ISBNから書籍情報を取得する関数
+'''
 import requests
 import json
 import time
 import re
 import sys
+import math
 from django.http import HttpResponse
 
 def search_book(isbn):
     search_result ={}
-    isbn = '978' + isbn
+    #isbn = '978' + isbn
     #print('searching ...ISBN:',isbn)
     #print("インデックス：" + str(index) + ", 値：" + val)
     #いくつかの引数を加えたURL
@@ -34,14 +38,27 @@ def search_book(isbn):
         #その場合はプログラム終了
         sys.exit()
 
-    #jsnがNoneではない場合
-    title = jsn['Items'][0]['Item']['title']
-    author = jsn['Items'][0]['Item']['author']
-    detail = jsn['Items'][0]['Item']['itemCaption']
-    publisher = jsn['Items'][0]['Item']['publisherName']
-    date = jsn['Items'][0]['Item']['salesDate']
-    price = str(jsn['Items'][0]['Item']['itemPrice'])
+    if jsn['hits'] != 0:
+        #jsnがNoneではない場合
+        result = "success"
+        title = jsn['Items'][0]['Item']['title']
+        author = jsn['Items'][0]['Item']['author']
+        detail = jsn['Items'][0]['Item']['itemCaption']
+        publisher = jsn['Items'][0]['Item']['publisherName']
+        date = jsn['Items'][0]['Item']['salesDate']
+        date = date[0:4]
+        price = str(jsn['Items'][0]['Item']['itemPrice'])
+        price = math.ceil(int(price)/1.1)
+    else:
+        result = "error"
+        title = ""
+        author = ""
+        detail = ""
+        publisher = ""
+        date = ""
+        price = ""
+
     #辞書型に結果格納
-    search_result.update({'publisher':publisher,'title':title,'author':author,'price':price,'detail':detail,'date':date,'isbn':isbn})
+    search_result.update({'result':result,'publisher':publisher,'title':title,'author':author,'price':price,'detail':detail,'date':date,'isbn':isbn})
 
     return search_result

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+        {% block contents %}
+        <div class="container-fluid">
+            {% if message %}
+                <p>{{message}}</P>
+            {% endif %}
+            <p>ISBNを978から入力してください</p>
+            <div class="row">
+            </div>
+            <form  action="{% url 'app_folder:input_isbns' %}" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <textarea name="isbns" rows="20" col="13" pattern="^[0-9]" required ></textarea>
+                </div> <!--row end -->
+                <br>
+                <div class="row">
+                    <button type="submit" name="button" class="btn btn-block btn-info btn-lg col-xs-12 col-sm-6 col-md-4">
+                    検索
+                    </button>
+                </div>
+            </form>
+            <br>
+            <div class="row">
+                <button type="button" name="button" class="btn btn-block btn-info btn-lg col-xs-12 col-sm-6 col-md-4" onclick="location.href='../'">トップへ戻る</button>
+            </div>
+        </div>
+        {% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+        {% block contents %}
+        <div class="container-fluid">
+            {% if message %}
+                <p>{{message}}</P>
+            {% endif %}
+            <div class="row">
+                <p>廃棄リストに登録</p>
+                <p>ISBN（10桁）を手入力してください</p>
+                <p>※楽天ブックスのデータベースより書籍情報を検索します</p>
+            </div>
+            <form  action="{% url 'app_folder:disposal_isbn' %}" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <a>ISBN：978-</a>
+                    <input type="text" name="isbn" pattern="^[0-9]{10}" required />
+                </div> <!--row end -->
+                <br>
+                <div class="row">
+                    <button type="submit" name="button" class="btn btn-block btn-warning btn-lg col-xs-12 col-sm-6 col-md-4">
+                    検索
+                    </button>
+                </div>
+            </form>
+            <br>
+            <div class="row">
+                <button type="button" name="button" class="btn btn-block btn-warning btn-lg col-xs-12 col-sm-6 col-md-4" onclick="location.href='../'">トップへ戻る</button>
+            </div>
+        </div>
+        {% endblock %}

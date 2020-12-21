@@ -1,41 +1,27 @@
-{% load bootstrap4 %}
-{% bootstrap_css %}
-{% bootstrap_javascript jquery='slim' %}
-{% load static %}
-
-<html lang="ja">
-  <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" type='text/css' href="{% static 'css/style.css'%}">
-    <link rel="stylesheet" href="https://cccabinet.jpn.org/bootstrap4/css/style.css">
-    <title> Book List Maker </title>
-    {% block extra_css %}{% endblock %}
-  </head>
-            {% block contents %}
-
-            <h1>ISBN（10桁）を手入力してください</h1>
-            <h6>※楽天ブックスのデータベースより書籍情報を検索します</h6>
-            <hr>
+{% extends 'base.html' %}
+        {% block contents %}
+        <div class="container-fluid">
+            {% if message %}
+            <p>{{message}}</P>
+            {% endif %}
+            <h6>発注リストに登録するISBN（10桁）を手入力してください<br>
+            ※楽天ブックスのデータベースより書籍情報を検索します</h6>
             <form  action="{% url 'app_folder:input_isbn' %}" method="post">
-            {% csrf_token %}
-            <div class="container-fluid">
-
+                {% csrf_token %}
                 <div class="row">
-                        <a>ISBN978-</a>
-                        <input type="text" name="isbn" pattern="^[0-9]{10}" required />
+                    <a>ISBN：978-</a>
+                    <input type="text" name="isbn" pattern="^[0-9]{10}" required />
                 </div> <!--row end -->
-
+                <br>
                 <div class="row">
-                  <div class="text-left align-bottom">
-                    <button type="submit" name="button" class="btn btn-info">
+                    <button type="submit" name="button" class="btn btn-block btn-info btn-lg col-xs-12 col-sm-6 col-md-4">
                     検索
                     </button>
-                  </div>
                 </div>
-
-            </div>
-
-
             </form>
-
-            {% endblock %}
+            <br>
+            <div class="row">
+                <button type="button" name="button" class="btn btn-block btn-info btn-lg col-xs-12 col-sm-6 col-md-4" onclick="location.href='../'">トップへ戻る</button>
+            </div>
+        </div>
+        {% endblock %}

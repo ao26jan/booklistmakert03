@@ -31,3 +31,6 @@ urlpatterns = [
 
 # メディアファイル公開用のURL設定
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if settings.DEBUG:
+    urlpatterns += static(settings.IMAGE_URL, document_root=settings.IMAGE_ROOT)

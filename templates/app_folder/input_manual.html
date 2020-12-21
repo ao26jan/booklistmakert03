@@ -1,104 +1,27 @@
-{% load bootstrap4 %}
-{% bootstrap_css %}
-{% bootstrap_javascript jquery='slim' %}
-{% load static %}
-
-<html lang="ja">
-  <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" type='text/css' href="{% static 'css/style.css'%}">
-    <link rel="stylesheet" href="https://cccabinet.jpn.org/bootstrap4/css/style.css">
-    <title> Book List Maker </title>
-    {% block extra_css %}{% endblock %}
-  </head>
+{% extends 'base.html' %}
             {% block contents %}
-
-            <h1>書籍情報を手入力してください</h1>
-            <hr>
+        <div class="container-fluid">
+            {{message}}
+            <p>発注リストに登録する書籍情報を手入力してください</p>
             <form action="{% url 'app_folder:input_manual' %}" method="post" novalidate>
-            {% csrf_token %}
-            <div class="container-fluid">
-              <table>
-                {{ form.as_table }}
-              </table>
-            </div>
-
-            <hr>
-
-            <div class="container-fluid">
-                <!--
-                <div class="row">
+                {% csrf_token %}
+                <div class="container-fluid">
                   <table>
-                    <tr>
-                      <td>
-                        <a>出版社</a>
-                      </td>
-                      <td>
-                        <input type="text" name="publisher"/>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a>書名</a>
-                      </td>
-                      <td>
-                        <input type="text" name="title" />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a>著者</a>
-                      </td>
-                      <td>
-                        <input type="text" name="author" />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a>単価</a>
-                      </td>
-                      <td>
-                        <input type="text" name="price" />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a>詳細</a>
-                      </td>
-                      <td>
-                        <input type="text" name="detail" />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a>出版年月</a>
-                      </td>
-                      <td>
-                        <input type="text" name="date" />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a>ISBN</a>
-                      </td>
-                      <td>
-                        <input type="text" name="isbn" />
-                      </td>
+                    {{ form.as_table }}
                   </table>
-                </div> row end
-                -->
-
+                </div>
+                <br>
                 <div class="row">
-                  <div class="text-left align-bottom">
-                    <button type="submit" name="button" class="btn btn-info" value="submit">
+                    <button type="submit" name="input_method" class="btn btn-block btn-info btn-lg col-xs-12 col-sm-6 col-md-4" value="regist">
                     登録
                     </button>
-                  </div>
                 </div>
-
-              </div>
-            </div>
-
             </form>
+            <br>
+            <div class="row">
+                <button type="button" name="button" class="btn btn-block btn-info btn-lg col-xs-12 col-sm-6 col-md-4" onclick="location.href='../'">トップへ戻る</button>
+            </div>
+            <br>
+        </div>
 
             {% endblock %}

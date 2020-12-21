@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+        {% block contents %}
+        <div class="container-fluid">
+
+            {% if message %}
+                <p>{{message}}</P>
+            {% endif %}
+            <p>バーコードを撮影、またはバーコード画像を選択してください.楽天ブックスのデータベースより書籍情報を検索します </p>
+            <form  action="{% url 'app_folder:disposal_barcode' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+                <!--プレビュー領域-->
+                <div class="row">
+                    <div class="imagePreview"></div>
+                </div>
+
+                <div class="row">
+                    <div class="input-group">
+                        <label class="input-group-btn">
+                            <span class="btn btn-primary">
+                                撮影選択<input type="file" name="myfile" accept="image/*" capture="camera" style="display:none" class="uploadFile" required>
+                            </span>
+                        </label>
+                        <input type="text"  class="form-control" readonly="">
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <button type="submit" name="button" class="btn btn-block btn-warning btn-lg col-xs-12 col-sm-6 col-md-4">
+                    検索
+                    </button>
+                </div>
+
+            </form>
+            <br>
+            <div class="row">
+                <button type="button" name="button" class="btn btn-block btn-warning btn-lg col-xs-12 col-sm-6 col-md-4" onclick="location.href='../'">トップへ戻る</button>
+            </div>
+            <br>
+        </div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script>
+        $(document).on('change', ':file', function() {
+            var input = $(this),
+            numFiles = input.get(0).files ? input.get(0).files.length : 1,
+            label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+            input.parent().parent().next(':text').val(label);
+
+            var files = !!this.files ? this.files : [];
+            if (!files.length || !window.FileReader) return; // no file selected, or no FileReader support
+            if (/^image/.test( files[0].type)){ // only image file
+                var reader = new FileReader(); // instance of the FileReader
+                reader.readAsDataURL(files[0]); // read the local file
+                reader.onloadend = function(){ // set image data as background of div
+                    input.parent().parent().parent().prev('.imagePreview').css("background-image", "url("+this.result+")");
+                }
+            }
+        });
+
+        </script>
+        {% endblock %}

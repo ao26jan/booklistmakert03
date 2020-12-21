@@ -1,54 +1,71 @@
 <!DOCTYPE html>
-
 {% load bootstrap4 %}
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='slim' %}
 {% load static %}
 
 <html lang="ja">
-  <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" type='text/css' href="{% static 'css/style.css'%}">
-    <link rel="stylesheet" href="https://cccabinet.jpn.org/bootstrap4/css/style.css">
-    <title> Book List Maker </title>
-    {% block extra_css %}{% endblock %}
-  </head>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type='text/css' href="{% static 'css/style.css'%}">
+        <link rel="stylesheet" href="https://cccabinet.jpn.org/bootstrap4/css/style.css">
+        <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script>
+        <script>
+          bsCustomFileInput.init();
+        </script>
+        <title> Book List Maker </title>
+        {% block extra_css %}{% endblock %}
 
-  <body>
-    <!-- ↓↓１番上のナビゲーションバー↓↓ -->
-    <div class="container-fluid">
-        <!--
-      <div class="row">
+        <style>
+        .imagePreview {
+            width: 100%;
+            height: 180px;
+            background-position: center center;
+            background-size: cover;
+            -webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, .3);
+            display: inline-block;
+        }
+        .btn_area {
+            max-width:400px;
+        }
 
-        <div class="col-12">-->
-          <nav class="navbar navbar-expand-lg fixed-top navbar-dark bs-navbar" style='background-color:cadetblue;' id="bs-navbar">
-            <a class="navbar-brand mr-md-2" href="/app_folder/index">
-              Book List Maker
-            </a>
-            <!-- ↓↓レイアウトを調整する為のダミー↓↓ -->
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item"><a class="nav-link" href="#">   </a></li>
-              <li class="nav-item"><a class="nav-link" href="#">   </a></li>
-            </ul>
-            <!-- ↑↑ダミーここまで↑↑ -->
-            <ul class="navbar-nav">
-              <!--
-              <li class="nav-item"><a class="nav-link" href="/#" >サンプル１</a></li>
-              <li class="nav-item"><a class="nav-link" href="/#" >サンプル２</a></li>
-              <li class="nav-item"><a class="nav-link" href="/#" >サンプル３</a></li>
+        </style>
+    </head>
+    <body>
+        <script type="text/javascript" src="{% static 'js/file_import.js' %}"></script>
+        <!-- ↓↓１番上のナビゲーションバー↓↓ -->
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">
+              <nav class="navbar navbar-expand-lg fixed-top navbar-dark bs-navbar" style='background-color:grey;' id="bs-navbar">
+                <a class="navbar-brand mr-md-2" href="https://ao26jan.pythonanywhere.com/app_folder/">
+                  Book List Maker
+                </a>
+                <!-- ↓↓レイアウトを調整する為のダミー↓↓ -->
+                <ul class="navbar-nav mr-auto">
+                  <li class="nav-item"><a class="nav-link" href="#">   </a></li>
+                  <li class="nav-item"><a class="nav-link" href="#">   </a></li>
+                </ul>
+                <!-- ↑↑ダミーここまで↑↑ -->
+                <ul class="navbar-nav">
+                  <!--
+                  <li class="nav-item"><a class="nav-link" href="/#" >サンプル１</a></li>
+                  <li class="nav-item"><a class="nav-link" href="/#" >サンプル２</a></li>
+                  <li class="nav-item"><a class="nav-link" href="/#" >サンプル３</a></li>
 
-              <li class="nav-item"><a class="nav-link" href="/accounts/login" >ログイン</a></li>
-              <li class="nav-item"><a class="nav-link" href="/accounts/logout" >ログアウト</a></li>
-              -->
-            </ul>
-          </nav><!--
+                  <li class="nav-item"><a class="nav-link" href="/accounts/login" >ログイン</a></li>
+                  <li class="nav-item"><a class="nav-link" href="/accounts/logout" >ログアウト</a></li>
+                  -->
+                </ul>
+              </nav>
+            </div>
+          </div>
         </div>
-      </div>-->
-    </div>
 
-    <!-- 「サイドバー」と「コンテンツ本体部分」 -->
-    <div id="content" class="container-fluid">
-      <div class="row flex-xl-nowrap">
+        <!-- 「サイドバー」と「コンテンツ本体部分」 -->
+        <!--div id="content" class="container-fluid">
+        <div class="row flex-xl-nowrap" -->
 
         <!-- ↓↓サイドバー↓↓ -->
         <!--
@@ -105,15 +122,13 @@
 
         <!-- ↓↓コンテンツ本体↓↓ -->
         <div class="col-12">
+            <BR><BR><BR><BR>
           {% block contents %}
           {% endblock %}
         </div>
         <!-- ↑↑コンテンツ本体ここまで↑↑ -->
 
-      </div>
-    <!--</div>-->
-    </div>
-  </body>
+    </body>
 </html>
 
 <!-- サイドバーに使用しているアイコン -->
