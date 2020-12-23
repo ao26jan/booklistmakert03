@@ -24,14 +24,15 @@ from ..forms import DisposalListForm
 from .search_book import search_book
 from .img_to_isbn import img_to_isbn
 from PIL import Image,ImageFilter
-#from datetime import datetime,date
+from datetime import datetime,date
 
 from . import app_settings
 app_settings.init()
 
 def disposal_barcode(request):
     context = app_settings.context
-
+    if context['ms_flag'] == 0:
+        context['message'] = ""
     #POSTで画像がないとき
     if request.method == 'POST' and request.FILES == None:
         context["message"] ="myfileがNULLです。バーコードを撮影、またはバーコード画像を選択してください "
@@ -79,6 +80,7 @@ def disposal_barcode(request):
             os.remove(image_url)
             return render(request, 'app_folder/disposal_barcode.html',context)
 
+        bookdata_dict['disposal_date'] = date.today()
         #formにbookdata_dictを差し込み
         form = DisposalListForm(bookdata_dict)
         title = bookdata_dict['title']

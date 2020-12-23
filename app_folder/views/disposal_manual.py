@@ -114,7 +114,7 @@ def disposal_manual(request):
                 else:
                     context['message'] = "■必須項目が未入力、または書式エラーです。再入力してください。"
                     context['ms_flag'] = 0
-                    return render(request,'app_folder/input_manual.html',context)
+                    return render(request,'app_folder/disposal_manual.html',context)
 
     context['ms_flag'] = 0
     return render(request, 'app_folder/disposal_manual.html', context)

@@ -2,7 +2,7 @@
             {% block contents %}
         <div class="container-fluid">
             {{message}}
-            <p>発注リストに登録する書籍情報を手入力してください</p>
+            <p>■発注リストに登録する書籍情報を手入力してください。</p>
             <form action="{% url 'app_folder:input_manual' %}" method="post" novalidate>
                 {% csrf_token %}
                 <div class="container-fluid">

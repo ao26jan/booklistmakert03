@@ -4,7 +4,7 @@
             {% if message %}
                 <p>{{message}}</P>
             {% endif %}
-            <p>ISBNを978から入力してください</p>
+            <p>■発注リストに登録する、978から始まる13桁のISBNを入力してください。</p>
             <div class="row">
             </div>
             <form  action="{% url 'app_folder:input_isbns' %}" method="post">

@@ -17,11 +17,11 @@ from django.shortcuts import redirect
 #from ..models import BookListModel
 #from ..models import DisposalListModel
 #from ..models import Upload
-from ..forms import BookRegistForm
-#from .forms import DisposalListForm
-#from .forms import UploadForm
+#from ..forms import BookRegistForm
+from ..forms import DisposalListForm
+#from ..forms import UploadForm
 from .search_book import search_book
-#from .img_to_isbn import img_to_isbn
+#from ..img_to_isbn import img_to_isbn
 #from PIL import Image,ImageFilter
 #from datetime import datetime,date
 
@@ -29,7 +29,7 @@ from . import app_settings
 app_settings.init()
 
 #ISBN複数入力
-def input_isbns(request):
+def disposal_isbns(request):
     context=app_settings.context
     if context['ms_flag'] == 0:
         context['message'] = ""
@@ -62,7 +62,7 @@ def input_isbns(request):
             #form = BookRegistForm(request.POST)
 
             #formにbookdata_dictを差し込み
-            form = BookRegistForm(bookdata_dict)
+            form = DisposalListForm(bookdata_dict)
             #return HttpResponse(form['publisher'])
 
             # formを保存
@@ -79,10 +79,10 @@ def input_isbns(request):
                 context['bookdata_dict']=bookdata_dict
                 context['form']=form
                 isbn_list1.append(isbn)
-        context['message'] = str(i) + "件中、" + str(context['count_success']) + "件が発注リストに登録されました。"
+        context['message'] = str(i) + "件中、" + str(context['count_success']) + "件が廃棄リストに登録されました。"
         if len(isbn_list1)>0:
             context['message'] += "エラー" + str(len(isbn_list1)) +"件のISBNは、" + ','.join(isbn_list1) + "、です。"
         context['ms_flag'] = 1
         #return render(request, 'app_folder/index.html',context)
         return redirect('../')
-    return render(request, 'app_folder/input_isbns.html',context)
+    return render(request, 'app_folder/disposal_isbns.html',context)

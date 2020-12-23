@@ -149,3 +149,7 @@ STATIC_ROOT = '/var/www/{}/static'.format(PROJECT_NAME)
 #ao: メディアファイルに関する設定
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+#ao:ログインページの設定
+#LOGIN_URL = 'register:login'
+#LOGIN_REDIRECT_URL = 'register:top'

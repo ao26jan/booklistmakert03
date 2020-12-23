@@ -4,8 +4,8 @@
             {% if message %}
             <p>{{message}}</P>
             {% endif %}
-            <h6>発注リストに登録するISBN（10桁）を手入力してください<br>
-            ※楽天ブックスのデータベースより書籍情報を検索します</h6>
+            <p>■発注リストに登録する10桁のISBNを入力してください。</p>
+            <p>※楽天ブックスのデータベースより書籍情報を検索します。</p>
             <form  action="{% url 'app_folder:input_isbn' %}" method="post">
                 {% csrf_token %}
                 <div class="row">

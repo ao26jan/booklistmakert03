@@ -25,4 +25,7 @@ def init():
                 'mode':"",
                 'target_id':0,
                 'target_record':"",
+                'count_success':0,
+                'count_data':0,
+                'isbn_list':[],
                 }

@@ -5,14 +5,17 @@
             {% if message %}
                 <p>{{message}}</P>
             {% endif %}
-            <p>バーコードを撮影、またはバーコード画像を選択してください.楽天ブックスのデータベースより書籍情報を検索します </p>
+            <p>■バーコードを撮影、またはバーコード画像を選択してください。</p>
+            <p>楽天ブックスのデータベースより書籍情報を検索します </p>
             <form  action="{% url 'app_folder:input_barcode' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-                <!--プレビュー領域-->
+                <!--プレビュー領域
                 <div class="row">
                     <div class="imagePreview"></div>
                 </div>
-
+                -->
+                <!-- サムネイル表示領域 -->
+                <canvas id="canvas" width="0" height="0"></canvas>
                 <div class="row">
                     <div class="input-group">
                         <label class="input-group-btn">
@@ -25,7 +28,7 @@
                 </div>
                 <br>
                 <div class="row">
-                    <button type="submit" name="button" class="btn btn-block btn-info btn-lg col-xs-12 col-sm-6 col-md-4">
+                    <button type="submit" id="upload" name="button" class="btn btn-block btn-info btn-lg col-xs-12 col-sm-6 col-md-4">
                     検索
                     </button>
                 </div>
@@ -40,23 +43,120 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <script>
-        $(document).on('change', ':file', function() {
-            var input = $(this),
-            numFiles = input.get(0).files ? input.get(0).files.length : 1,
-            label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-            input.parent().parent().next(':text').val(label);
+        <script type="text/javascript">
+        $(function() {
+          var file = null; // 選択ファイルが格納される変数
+          var blob = null; // 画像(BLOBデータ)が格納される変数
+          const THUMBNAIL_MAX_WIDTH = 200; // 画像がヨコ長の場合、横サイズがこの値になるように縮小される
+          const THUMBNAIL_MAX_HEIGHT = 200; // 画像がタテ長の場合、縦サイズがこの値になるように縮小される
 
-            var files = !!this.files ? this.files : [];
-            if (!files.length || !window.FileReader) return; // no file selected, or no FileReader support
-            if (/^image/.test( files[0].type)){ // only image file
-                var reader = new FileReader(); // instance of the FileReader
-                reader.readAsDataURL(files[0]); // read the local file
-                reader.onloadend = function(){ // set image data as background of div
-                    input.parent().parent().parent().prev('.imagePreview').css("background-image", "url("+this.result+")");
-                }
+          // ファイルが選択されたら実行される関数
+          $('input[type=file]').change(function() {
+
+            // ファイルを取得する
+            file = $(this).prop('files')[0];
+
+            // 選択されたファイルが画像かどうか判定する
+            // ここでは、jpeg形式とpng形式のみを画像をみなす
+            if (file.type != 'image/jpeg' && file.type != 'image/png') {
+              // 画像でない場合は何もせず終了する
+              file = null;
+              blob = null;
+              return;
             }
-        });
 
+            // 画像をリサイズする
+            var image = new Image();
+            var reader = new FileReader();
+            reader.onload = function(e) {
+              image.onload = function() {
+
+                // 縮小後のサイズを計算する
+                var width, height;
+                if(image.width > image.height){
+                  // ヨコ長の画像は横サイズを定数にあわせる
+                  var ratio = image.height/image.width;
+                  width = THUMBNAIL_MAX_WIDTH;
+                  height = THUMBNAIL_MAX_WIDTH * ratio;
+                } else {
+                  // タテ長の画像は縦のサイズを定数にあわせる
+                  var ratio = image.width/image.height;
+                  width = THUMBNAIL_MAX_HEIGHT * ratio;
+                  height = THUMBNAIL_MAX_HEIGHT;
+                }
+
+                // 縮小画像を描画するcanvasのサイズを上で算出した値に変更する
+                var canvas = $('#canvas')
+                             .attr('width', width)
+                             .attr('height', height);
+
+                var ctx = canvas[0].getContext('2d');
+
+                // canvasに既に描画されている画像があればそれを消す
+                ctx.clearRect(0,0,width,height);
+
+                // canvasに縮小画像を描画する
+                ctx.drawImage(image,
+                  0, 0, image.width, image.height,
+                  0, 0, width, height
+                );
+
+                // canvasから画像をbase64として取得する
+                var base64 = canvas.get(0).toDataURL('image/jpeg');
+
+                // base64から画像データを作成する
+                var barr, bin, i, len;
+                bin = atob(base64.split('base64,')[1]);
+                len = bin.length;
+                barr = new Uint8Array(len);
+                i = 0;
+                while (i < len) {
+                  barr[i] = bin.charCodeAt(i);
+                  i++;
+                }
+                blob = new Blob([barr], {type: 'image/jpeg'});
+
+              }
+              image.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+          });
+
+
+          // アップロードボタンがクリックされたら実行される関数
+          $('#upload').click(function(){
+
+            // ファイルが指定されていなければ何も起こらない
+            if(!file || !blob) {
+              return;
+            }
+
+            // 送信するフォームデータを作成する
+            var name, fd = new FormData();
+
+            // 先ほど作った縮小済画像データを添付する
+            fd.append('file', blob);
+
+            // ajax でアップロード
+            $.ajax({
+              url: "https://ao26jan.pythonanywhere.com/media", // 送信先のURL
+              type: 'POST',
+              dataType: 'json',
+              data: fd,
+              processData: false,
+              contentType: false
+            })
+            .done(function( data, textStatus, jqXHR ) {
+              // 送信成功
+            })
+            .fail(function( jqXHR, textStatus, errorThrown ) {
+              // 送信失敗
+            });
+
+          });
+
+        });
         </script>
+
+
         {% endblock %}

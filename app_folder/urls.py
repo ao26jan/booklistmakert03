@@ -10,6 +10,7 @@ from .views.csv_export_disposal import *
 from .views.delete_all import *
 from .views.delete_disposal import *
 from .views.delete_record import *
+from .views.disposal_isbns import *
 from .views.disposal_barcode import *
 from .views.disposal_isbn import *
 from .views.disposal_manual import *
@@ -27,6 +28,7 @@ urlpatterns = [
     path('input_isbn/', input_isbn, name='input_isbn'),
     path('input_isbns/', input_isbns, name='input_isbns'),
     path('input_manual/', input_manual, name='input_manual'),
+    path('disposal_isbns/', disposal_isbns, name='disposal_isbns'),
     path('disposal_isbn/', disposal_isbn, name='disposal_isbn'),
     path('disposal_barcode/', disposal_barcode, name='disposal_barcode'),
     path('disposal_manual/', disposal_manual, name='disposal_manual'),

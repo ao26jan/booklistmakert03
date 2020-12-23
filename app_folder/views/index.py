@@ -47,6 +47,9 @@ def index(request):
     mode = ""
     target_id = 0
     target_record = ""
+    count_success = 0
+    count_data = 0
+    isbn_list = []
 
     context['ms_flag'] = 0
     return render(request, 'app_folder/index.html',context)

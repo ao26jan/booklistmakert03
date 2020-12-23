@@ -61,8 +61,8 @@ def input_barcode(request):
 
         #ファイルのアドレス取得
         uploaded_file_url = fs.url(filename)
+        context["uploaded_file_url"] = uploaded_file_url
         if uploaded_file_url == None:
-            #context["uploaded_file_url"] = uploaded_file_url
             context["message"] = "画像が読み込めませんでした "
             return redirect ('app_folder/input_barcode.html')
             #return render(request,'app_folder/input_barcode.html',context)
@@ -73,7 +73,7 @@ def input_barcode(request):
         isbn = img_to_isbn(img)
         if isbn==None:
             context["message"] = "ISBNが認識できませんでした。再度撮影し直してください"
-            os.remove(image_url)
+            #os.remove(image_url)
             return render(request,'app_folder/input_barcode.html',context)
 
         #ISBNから書誌情報取得
@@ -82,7 +82,7 @@ def input_barcode(request):
         #context["bookdata_dict"] = bookdata_dict
         if bookdata_dict['result'] == 'error':
             context['message'] = "ISBN:" + isbn + " で検索しましたが見つかりませんでした。"
-            os.remove(image_url)
+            #os.remove(image_url)
             return render(request, 'app_folder/input_barcode.html',context)
 
         #formにbookdata_dictを差し込み
@@ -96,9 +96,9 @@ def input_barcode(request):
             context['ms_flag'] = 1
             context['bookdata_dict'] = bookdata_dict
             context['form'] = form
-            os.remove(image_url)
-            shutil.rmtree('/home/ao26jan/mysite/media/')
-            os.mkdir('/home/ao26jan/mysite/media/')
+            #os.remove(image_url)
+            #shutil.rmtree('/home/ao26jan/mysite/media/')
+            #os.mkdir('/home/ao26jan/mysite/media/')
             return redirect('../')
             #render(request,'app_folder/input_barcode.html',context)
         else:
@@ -110,6 +110,6 @@ def input_barcode(request):
             #return redirect('../')
             return render(request,'app_folder/input_barcode.html',context)
 
-        os.remove(image_url)
+        #os.remove(image_url)
 
     return render(request, 'app_folder/input_barcode.html',context)

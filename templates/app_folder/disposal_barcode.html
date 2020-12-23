@@ -5,7 +5,8 @@
             {% if message %}
                 <p>{{message}}</P>
             {% endif %}
-            <p>バーコードを撮影、またはバーコード画像を選択してください.楽天ブックスのデータベースより書籍情報を検索します </p>
+            <p>■バーコードを撮影、またはバーコード画像を選択してください。</p>
+            <p>※楽天ブックスのデータベースより書籍情報を検索します </p>
             <form  action="{% url 'app_folder:disposal_barcode' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
                 <!--プレビュー領域-->

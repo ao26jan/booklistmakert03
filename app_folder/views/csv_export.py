@@ -38,8 +38,8 @@ def csv_export(request):
     #データ読み込み
     BookList = BookListModel.objects.all()
     #タイトル行書き込み
-    writer.writerow(['No','出版社','書名','著者','価格','詳細','出版年月','ISBN'])
+    writer.writerow(['出版社','書名','著者','価格','詳細','出版年月','ISBN'])
     #データ書き込み
     for BookList in BookList:
-        writer.writerow([BookList.id,BookList.publisher,BookList.title,BookList.author,BookList.price, BookList.detail,BookList.date,BookList.isbn])
+        writer.writerow([BookList.publisher,BookList.title,BookList.author,BookList.price, BookList.detail,BookList.date,BookList.isbn])
     return response
